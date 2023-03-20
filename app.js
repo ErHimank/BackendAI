@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 
 
-require('dotenv/config');
+require('dotenv').config();
 const authJwt = require('./helper/jwt');
 const errorHandler = require('./helper/error-Handler');
 app.use(cors());
@@ -45,7 +45,7 @@ app.use(`${api}/NewCandidates` , newcandidateRouter);
 
 //Database  
 mongoose.set('strictQuery', true);
-mongoose.connect(process.env.CONNECTION_STRING ,
+mongoose.connect('mongodb+srv://AifetchSona:SonaAifetch1@cluster0.xj5ztzg.mongodb.net/?retryWrites=true&w=majority',
     {
         dbName: 'AifetchDatab'
     } 
@@ -57,9 +57,9 @@ mongoose.connect(process.env.CONNECTION_STRING ,
     console.log(err);
 })
 
-app.listen(3000 , ()=>{
+app.listen(8080 , ()=>{
     console.log(api);
-    console.log('Server is Started in http://localhost:3000');
+    console.log('Server is Started in http://localhost:8080');
 })
 
 
