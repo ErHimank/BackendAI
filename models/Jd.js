@@ -45,6 +45,10 @@ const JdSchema = mongoose.Schema({    // this is model schema
     UploadJd: { 
         type : String,
         default : ''
+    },
+    userID: {
+        type: mongoose.Schema.Types.ObjectID,
+        ref: 'User'
     }
 })
 

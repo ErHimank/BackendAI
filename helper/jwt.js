@@ -18,18 +18,20 @@ function  authJwt() {
             `${api}/Users/login` ,
             `${api}/Users/register` ,
             `${api}/Jds`,
+            // `${api}/Users/verify-otp`,
+            `${api}/Users`,
 
         ]
     })
 }
 
 async function isRevoked(req,payload ) {
-    console.log(payload)
+    console.log(payload) 
     if(payload.isAdmin == false) {
         console.log("not admin");
         return true;
     }
-     console.log('admin')
+     console.log('admin') 
      return false;
 }
 
