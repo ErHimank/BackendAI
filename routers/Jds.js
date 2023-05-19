@@ -19,26 +19,28 @@ router.get(`/`, async (req, res) => {
 router.post(`/`, async (req, res) => {
   let jd = new Jd({
     Position: req.body.Position,
+    BriefDescription: req.body.BriefDescription,
     JobLocation: req.body.JobLocation,
     JobTitle: req.body.JobTitle,
+    JobDescription: req.body.JobDescription,
     RoleType: req.body.RoleType,
+    RoleDescription: req.body.RoleDescription,
     BaseSalary: req.body.BaseSalary,
     OTE: req.body.OTE,
     WorkExperience: req.body.WorkExperience,
     AgeLimit: req.body.AgeLimit,
     GraduationYear: req.body.GraduationYear,
-    HighestQualification: req.body.HighestQualification,
+    HighestQualification: req.body.HighestQualifzication,
     UploadJd: req.body.UploadJd,
     userID: req.body.userID,
   });
-  
+
   jd = await jd.save();
   if (!jd) {
     return res.status(500).send("jd cannot be created");
   }
   res.send(jd);
 });
-
 
 router.delete("/:id", (req, res) => {
   Jd.findByIdAndRemove(req.params.id)
@@ -84,9 +86,12 @@ router.put("/:id", async (req, res) => {
     req.params.id,
     {
       Position: req.body.Position,
+      BriefDescription: req.body.BriefDescription,
       JobLocation: req.body.JobLocation,
       JobTitle: req.body.JobTitle,
+      JobDescription: req.body.JobDescription,
       RoleType: req.body.RoleType,
+      RoleDescription: req.body.RoleDescription,
       BaseSalary: req.body.BaseSalary,
       OTE: req.body.OTE,
       WorkExperience: req.body.WorkExperience,
@@ -94,6 +99,7 @@ router.put("/:id", async (req, res) => {
       GraduationYear: req.body.GraduationYear,
       HighestQualification: req.body.HighestQualification,
       UploadJd: req.body.UploadJd,
+      // userID: req.body.userID,
     },
     { new: true }
   );
@@ -171,5 +177,15 @@ router.post("/Email", async (req, res) => {
     });
 });
 
+const multer = require("multer");
+const upload = multer({ dest: "uploads/pdf/" });
+
+router.post("/upload", upload.single("file"), (req, res) => {
+  const files = req.file;
+  if (!files) return res.status(400).send("No file Upload");
+  console.log(files);
+  res.send("File uploaded successfully!");
+});
 
 module.exports = router;
+ 

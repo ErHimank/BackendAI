@@ -43,8 +43,12 @@ const UserSchema = mongoose.Schema({
     type: String,
     default: "",
   },
- 
+  image: {
+    type: String,
+    default: "",
+  },
 });
+
 UserSchema.virtual("id").get(function () {
   return this._id.toHexString();
 });

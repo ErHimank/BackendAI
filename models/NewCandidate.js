@@ -6,10 +6,6 @@ const NewCandidateSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  JobLocation: {
-    type: String,
-    required: true,
-  },
   City: {
     type: String,
     default: "",
@@ -23,16 +19,12 @@ const NewCandidateSchema = mongoose.Schema({
   },
   CompanyName: {
     type: String,
-    default: 0,
+    default: "",
   },
   LinkedinLink: {
     type: String,
     default: "",
   },
-  FacebookLink: {
-    type: String,
-  },
-
   PersonalEmail: {
     type: String,
     required: true,
@@ -52,6 +44,7 @@ const NewCandidateSchema = mongoose.Schema({
 
   GraduationYear: {
     type: Number,
+    default: 0,
     required: true,
   },
   Salary: {
@@ -65,6 +58,18 @@ const NewCandidateSchema = mongoose.Schema({
   ResumeUpload: {
     type: String,
     default: "",
+  },
+  image: {
+    type: String,
+    default: "",
+  },
+  Status:{
+    type: Number,
+    default: 0
+  },
+  JdId:{
+    type: mongoose.Schema.Types.ObjectID,
+    ref: "Jd",
   },
   userID: {
     type: mongoose.Schema.Types.ObjectID,

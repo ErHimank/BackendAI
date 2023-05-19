@@ -10,17 +10,16 @@ function  authJwt() {
 
     }).unless({
         path : [
-            {url : /\/api\/AI\/Products(.*)/ ,  methods : ['GET' , 'OPTIONS']},
+            {url : /\/api\/AI\/Products(.*)/ ,  methods : ['GET' , 'OPTIONS','PUT',`POST`]},
             {url : /\/api\/AI\/Categories(.*)/ ,  methods : ['GET' , 'OPTIONS']},
             {url : /\/public\/uploads(.*)/ ,  methods : ['GET' , 'OPTIONS']},
             {url: /\/api\/AI\/Jds(.*)/ , methods : ['POST','GET' , 'PUT',  'DELETE',  'OPTIONS']},
             {url: /\/api\/AI\/NewCandidates(.*)/ , methods : ['GET' , 'POST', 'PUT',  'DELETE',  'OPTIONS']},
+            {url: /\/api\/AI\/Users(.*)/ , methods : ['PUT' , 'DELETE']},
             `${api}/Users/login` ,
             `${api}/Users/register` ,
             `${api}/Jds`,
-            // `${api}/Users/verify-otp`,
-            `${api}/Users`,
-
+            `${api}/Users`, 
         ]
     })
 }
