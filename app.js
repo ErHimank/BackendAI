@@ -57,9 +57,9 @@ mongoose.connect('mongodb+srv://AifetchSona:SonaAifetch1@cluster0.xj5ztzg.mongod
     console.log(err);
 })
 
-app.listen(3000 , ()=>{
+app.listen(8080 , ()=>{
     console.log(api);
-    console.log('Server is Started in http://localhost:3000');
+    console.log('Server is Started in http://localhost:8080');
 })
 
 
