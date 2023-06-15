@@ -37,99 +37,99 @@ const storage = multer.diskStorage({
 });
 const uploadOptions = multer({ storage: storage });
 
-//pdf
-const storagePdf = multer.diskStorage({
+// Create a Multer storage configuration
+const storage2 = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "public/uploads/pdf");
+    // cb(null, "public/uploads/products");
+    // Set the destination based on the file type
+    if (file.mimetype === 'application/pdf') {
+      cb(null, 'public/uploads/pdf');
+    } else if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/jpg') {
+      cb(null, 'public/uploads/profile');
+    } else {
+      cb(new Error('Invalid file type'));
+    }
   },
-  Pfilename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + "-" + Math.random(Math.random() * 1e9);
-    const FileExtension = path.extname(file.originalname);
-
-    cb(null, file.PFilename + "-" + uniqueSuffix + FileExtension);
+  filename: function (req, file, cb) {
+    // cb(null, Date.now() + "-" + file.originalname.split(" ").join("-"));
+    const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
+    let directory;
+    if (file.mimetype === 'application/pdf') {
+      directory = 'pdf';
+    } else if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/jpg') {
+      directory = 'profile';
+    } else {
+      cb(new Error('Invalid file type'));
+      return;
+    }
+    const fileName = Date.now() + '-' + file.originalname.split(' ').join('-');
+    const filePath = `${fileName}`;
+    cb(null, filePath);
   },
+ 
 });
 
-const Pdfupload = multer({ storage: storagePdf });
+// Create the Multer upload instance
+const upload = multer({ storage: storage2 });
 
-router.post("/pdf", Pdfupload.single("pdf"), async (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: "No Pdf File!" });
-  }
-  const PFilename = req.file.filename;
-  const path = req.file.path;
 
-  let newcandidate = new NewCandidate({
-    ResumeUpload: `${path}${PFilename}`
-  })
-  newcandidate = await newcandidate.save();
-  res.send(newcandidate);
-
-  return res.status(200).json({ message: "Pdf File! uploaded" });
-});
 
 //API TO ADD A NewCandidate
-router.post(`/`, uploadOptions.single("image"), async (req, res) => {
-  const file = req.file;
-  const PdfFile = req.file;
-  if (!file) return res.status(400).send("No image Upload");
-  if (!PdfFile) return res.status(400).send("No PdfFile Upload");
+router.post(
+  `/`,
+  upload.fields([
+    { name: "image", maxCount: 1 },
+    { name: "ResumeUpload", maxCount: 1 },
+  ]),
+  async (req, res) => {
+  
 
-  const fileName = req.file.filename;
-  // const PFileName = req.PdfFile.filename;
-  const basePath = `${req.protocol}://${req.get("host")}/public/uploads/`;
+    const pdfFile = req.files["ResumeUpload"][0];
+    const imageFile = req.files["image"][0];
+    // const img = toString(imageFile)
+    // console.log(img)
 
-  let newcandidate = new NewCandidate({
-    FullName: req.body.FullName,
-    City: req.body.City,
-    Country: req.body.Country,
-    JobTitle: req.body.JobTitle,
-    CompanyName: req.body.CompanyName,
-    LinkedinLink: req.body.LinkedinLink,
-    FacebookLink: req.body.FacebookLink,
-    PersonalEmail: req.body.PersonalEmail,
-    ProfessionalEmail: req.body.ProfessionalEmail,
-    PersonalPhoneNumber: req.body.PersonalPhoneNumber,
-    HighestQualification: req.body.HighestQualification,
-    GraduationYear: req.body.GraduationYear,
-    Salary: req.body.Salary,
-    JobDescription: req.body.JobDescription,
-    // ResumeUpload: `${basePath}${PFileName}`,
-    Status: req.body.Status,
-    image: `${basePath}${fileName}`,
-    JdId: req.body.JdId,
-    userID: req.body.userID,
-  });
+    // console.log("PDF File uploaded:", pdfFile.originalname);
+    // console.log("PDF File path:", pdfFile.path);
 
-  newcandidate = await newcandidate.save();
+    // console.log("Image File uploaded:", imageFile.originalname);
+    // console.log("Image File path:", imageFile.path);
 
-  if (!newcandidate)
-    return res.status(500).send("New Candidate cannot be created");
+    // const fileName = req.file.filename;
+    const basePath = `${req.protocol}://${req.get("host")}/public/uploads/`;
 
-  res.send(newcandidate);
-});
+    let newcandidate = new NewCandidate({ 
+      FullName: req.body.FullName,
+      City: req.body.City,
+      Country: req.body.Country,
+      JobTitle: req.body.JobTitle,
+      CompanyName: req.body.CompanyName,
+      LinkedinLink: req.body.LinkedinLink,
+      FacebookLink: req.body.FacebookLink,
+      PersonalEmail: req.body.PersonalEmail,
+      ProfessionalEmail: req.body.ProfessionalEmail,
+      PersonalPhoneNumber: req.body.PersonalPhoneNumber,
+      HighestQualification: req.body.HighestQualification,
+      GraduationYear: req.body.GraduationYear,
+      Salary: req.body.Salary,
+      JobDescription: req.body.JobDescription,
+      ResumeUpload: `${basePath}pdf/${pdfFile.filename}`,
+      Status: req.body.Status,
+      image: `${basePath}profile/${imageFile.filename}`,
+      JdId: req.body.JdId,
+      userID: req.body.userID,
+    });
 
-//img
-// router.put("/img/:id", uploadOptions.single("image"), async (req, res) => {
-//   const file = req.file;
-//   if (!file) return res.status(400).send("No image Upload");
+    newcandidate = await newcandidate.save();
 
-//   const fileName = req.file.filename;
-//   const basePath = `${req.protocol}://${req.get("host")}/public/uploads/`;
-//   let newImg = await NewCandidate.findByIdAndUpdate(
-//     req.params.id,
-//     {
-//       image: `${basePath}${fileName}`,
-//     },
-//     { new: true }
-//   );
+    if (!newcandidate)
+      return res.status(500).send("New Candidate cannot be created");
 
-//   newImg = await newImg.save();
+    res.send(newcandidate);
+  }
+);
 
-//   if (!newImg) return res.status(500).send("New Candidate cannot be created");
 
-//   res.send(newImg);
-// });
 
 //PDF UPLOAD
 

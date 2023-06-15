@@ -15,7 +15,7 @@ function  authJwt() {
             {url : /\/public\/uploads(.*)/ ,  methods : ['GET' , 'OPTIONS']},
             {url: /\/api\/AI\/Jds(.*)/ , methods : ['POST','GET' , 'PUT',  'DELETE',  'OPTIONS']},
             {url: /\/api\/AI\/NewCandidates(.*)/ , methods : ['GET' , 'POST', 'PUT',  'DELETE',  'OPTIONS']},
-            {url: /\/api\/AI\/Users(.*)/ , methods : ['PUT' , 'DELETE']},
+            {url: /\/api\/AI\/Users(.*)/ , methods : ['PUT' , 'DELETE','GET']},
             `${api}/Users/login` ,
             `${api}/Users/register` ,
             `${api}/Jds`,
